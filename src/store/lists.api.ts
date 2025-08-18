@@ -55,7 +55,7 @@ export const listsApi = createApi({
         { type: 'Lists', id: arg.id },
         {
           type: 'Lists',
-          id: `BOARD_${''}`,
+          id: `BOARD_${arg.id}`,
         },
       ],
     }),
