@@ -8,7 +8,7 @@ import rocksImage from '../../../assets/pictures/rocks.jpg';
 import { BoardsList } from './BoardsList/BoardsList';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useFetchBoardsQuery } from '../../../store/boardsSlice';
+import { useFetchBoardsQuery } from '../../../store/boards.api';
 import { useParams } from 'react-router-dom';
 
 export const TasksContainer = () => {

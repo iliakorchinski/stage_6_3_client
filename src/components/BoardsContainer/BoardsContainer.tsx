@@ -13,7 +13,7 @@ import {
   useDeleteBoardMutation,
   useFetchBoardsQuery,
   useUpdateBoardMutation,
-} from '../../store/boardsSlice';
+} from '../../store/boards.api';
 import { useState } from 'react';
 import { CreateBoardModal } from '../Modals/CreateBoardModal';
 import EditIcon from '@mui/icons-material/Edit';
