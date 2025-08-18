@@ -69,11 +69,19 @@ export const BoardsContainer = () => {
                 <div className={boardActions}>
                   <EditIcon
                     style={{ cursor: 'pointer' }}
-                    onClick={() => handleEditClick(item.id, item.title)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleEditClick(item.id, item.title);
+                    }}
                   />
                   <DeleteIcon
                     style={{ cursor: 'pointer' }}
-                    onClick={() => handleDeleteClick(item.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDeleteClick(item.id);
+                    }}
                   />
                 </div>
               </div>
