@@ -26,7 +26,6 @@ export const ListItemWrapper = ({
       const hoverIndex = index;
       if (dragIndex === hoverIndex) return;
       moveList(dragIndex, hoverIndex);
-      //   item.index = hoverIndex;
     },
   });
 

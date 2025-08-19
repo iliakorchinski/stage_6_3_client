@@ -22,17 +22,13 @@ export const TasksList = ({ listId, tasks, moveTask }: TasksListProps) => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  // drop-зона для всего списка
   const [, drop] = useDrop({
     accept: 'TASK',
     drop(item: { id: string; index: number; listId: string }) {
       if (!ref.current) return;
 
-      // если перетаскиваем в другой список и он пустой → ставим в индекс 0
       if (tasks.length === 0) {
         moveTask(item.index, 0, item.listId, listId);
-        item.index = 0;
-        item.listId = listId;
       }
     },
   });
