@@ -1,18 +1,18 @@
 import { useParams } from 'react-router';
 import {
-  useCreateListMutation,
-  useFetchListsQuery,
   useUpdateListMutation,
   useDeleteListMutation,
   type List,
   useReorderListsMutation,
+  useFetchListsQuery,
+  useCreateListMutation,
 } from '../../../../store/lists.api';
 import {
   useFetchTasksByBoardQuery,
   useMoveTaskMutation,
   useReorderTasksMutation,
 } from '../../../../store/tasks.api';
-import { container, deleteIcon } from './BoardList.css';
+import { container, deleteIcon } from './styles.css';
 import { useState, useEffect } from 'react';
 import { ListItemWrapper } from './ListItemWrapper/ListItemWrapper';
 import { TasksList } from '../../../Tasks/TasksList/TasksList';
@@ -30,7 +30,7 @@ export const BoardsList = () => {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAddingList, setIsAddingList] = useState(false);
 
-  const { data: lists } = useFetchListsQuery(id as string);
+  const { data: lists } = useFetchListsQuery([id as string]);
   const { data: tasks } = useFetchTasksByBoardQuery(id as string);
   const [updateList] = useUpdateListMutation();
   const [createList] = useCreateListMutation();
@@ -46,7 +46,7 @@ export const BoardsList = () => {
   const [allTasks, setAllTasks] = useState<Record<string, Task[]>>({});
 
   useEffect(() => {
-    if (lists) setListOrder(lists);
+    if (lists) setListOrder(lists[0].lists);
   }, [lists]);
 
   useEffect(() => {
@@ -108,8 +108,10 @@ export const BoardsList = () => {
   };
 
   const handleUpdateList = (listId: string, title: string) => {
-    const selectedList = lists?.find((list) => list.id === listId);
-    if (selectedList) setUpdatedItem({ ...selectedList, title });
+    const selectedList = lists?.[0].lists?.find((list) => list.id === listId);
+    if (selectedList) {
+      setUpdatedItem({ ...selectedList, title });
+    }
   };
 
   const handleSave = async () => {

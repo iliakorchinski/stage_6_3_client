@@ -3,7 +3,7 @@ import {
   type List,
 } from '../../../../../store/lists.api';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { input } from './ListItem.css';
+import { input } from './styles.css';
 
 interface ListItemProps {
   list: List;

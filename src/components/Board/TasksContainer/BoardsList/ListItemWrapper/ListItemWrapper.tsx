@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { type List } from '../../../../../store/lists.api';
-import { boardListContainer } from '../BoardList.css';
+import { boardListContainer } from '../styles.css';
 
 interface ListItemProps {
   list: List;

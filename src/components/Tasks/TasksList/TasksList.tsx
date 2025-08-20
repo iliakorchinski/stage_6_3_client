@@ -2,7 +2,7 @@ import { TaskItem } from '../TasksItem/TasksItem';
 import { useCreateTaskMutation, type Task } from '../../../store/tasks.api';
 import { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { addList } from './TasksList.css';
+import { addList } from './styles.css';
 
 interface TasksListProps {
   listId: string;

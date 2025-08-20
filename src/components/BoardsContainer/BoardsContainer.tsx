@@ -5,7 +5,7 @@ import {
   imageContainer,
   boardActions,
   boardWrapper,
-} from './BoardsContainer.css';
+} from './styles.css';
 import rocksImage from '../../assets/pictures/rocks.jpg';
 import { Link } from 'react-router-dom';
 import {

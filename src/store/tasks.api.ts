@@ -14,26 +14,16 @@ export const tasksApi = createApi({
   baseQuery: apiBaseQuery,
   tagTypes: ['Task'],
   endpoints: (builder) => ({
-    fetchTasks: builder.query<Task[], string>({
-      query: (listId) => `/lists/${listId}/tasks`,
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Task' as const, id })),
-              { type: 'Task', id: 'LIST' },
-            ]
-          : [{ type: 'Task', id: 'LIST' }],
-    }),
     createTask: builder.mutation<
       Task,
       { listId: string; title: string; description?: string }
     >({
       query: ({ listId, title, description }) => ({
-        url: `/lists/${listId}/tasks`,
+        url: `/tasks/create`,
         method: 'POST',
-        body: { title, description },
+        body: { title, description, listId },
       }),
-      invalidatesTags: [{ type: 'Task', id: 'LIST' }],
+      invalidatesTags: [{ type: 'Task', id: 'TASK' }],
     }),
     updateTask: builder.mutation<
       Task,
@@ -65,14 +55,18 @@ export const tasksApi = createApi({
       invalidatesTags: (result, error, { id }) => [{ type: 'Task', id }],
     }),
     fetchTasksByBoard: builder.query<Task[], string>({
-      query: (boardId) => `/boards/${boardId}/tasks`,
+      query: (boardId) => ({
+        url: '/tasks',
+        method: 'POST',
+        body: { boardId },
+      }),
       providesTags: (result) =>
         result
           ? [
               ...result.map(({ id }) => ({ type: 'Task' as const, id })),
-              { type: 'Task', id: 'LIST' },
+              { type: 'Task', id: 'TASK' },
             ]
-          : [{ type: 'Task', id: 'LIST' }],
+          : [{ type: 'Task', id: 'TASK' }],
     }),
     reorderTasks: builder.mutation<
       Task[],
@@ -90,7 +84,6 @@ export const tasksApi = createApi({
 });
 
 export const {
-  useFetchTasksQuery,
   useCreateTaskMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,

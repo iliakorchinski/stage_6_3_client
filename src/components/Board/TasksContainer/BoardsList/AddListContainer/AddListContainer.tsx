@@ -4,7 +4,7 @@ import {
   addButton,
   addListActions,
   saveButton,
-} from './AddListContainer.css';
+} from './styles.css';
 
 interface AddListContainerProps {
   isAddingList: boolean;

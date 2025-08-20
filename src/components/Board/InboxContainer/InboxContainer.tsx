@@ -3,7 +3,7 @@ import {
   inboxHeader,
   inboxHeaderTitle,
   inboxHeaderMainContent,
-} from './InboxContainer.css';
+} from './styles.css';
 
 export const InboxContainer = () => {
   return (

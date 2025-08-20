@@ -3,7 +3,7 @@ import {
   tasksHeader,
   tasksContent,
   boardTitle,
-} from './TasksContainer.css';
+} from './styles.css';
 import rocksImage from '../../../assets/pictures/rocks.jpg';
 import { BoardsList } from './BoardsList/BoardsList';
 import { DndProvider } from 'react-dnd';

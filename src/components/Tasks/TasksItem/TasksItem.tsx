@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { type Task } from '../../../store/tasks.api';
 import { useDrag, useDrop } from 'react-dnd';
 import { UpdateTaskModal } from '../../Modals/UpdateTaskModal';
-import { container, deleteIcon, spanTitle } from './TasksItem.css';
+import { container, deleteIcon, spanTitle } from './styles.css';
 
 interface TaskItemProps {
   task: Task;

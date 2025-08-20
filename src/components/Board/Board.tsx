@@ -1,4 +1,4 @@
-import { boardContainer } from './Board.css';
+import { boardContainer } from './styles.css';
 import { InboxContainer } from './InboxContainer/InboxContainer';
 import { TasksContainer } from './TasksContainer/TasksContainer';
 

@@ -10,26 +10,43 @@ export interface List {
   updatedAt: string;
 }
 
+interface ListsByBoard {
+  boardId: string;
+  lists: List[];
+}
+
 export const listsApi = createApi({
   reducerPath: 'listsApi',
   baseQuery: apiBaseQuery,
   tagTypes: ['Lists'],
   endpoints: (builder) => ({
-    fetchLists: builder.query<List[], string>({
-      query: (boardId) => `boards/${boardId}/lists`,
-      providesTags: (result, error, boardId) =>
+    fetchLists: builder.query<ListsByBoard[], string[]>({
+      query: (boardIds) => ({
+        url: '/lists',
+        method: 'POST',
+        body: { boardIds },
+      }),
+      providesTags: (result, error, boardIds) =>
         result
           ? [
-              ...result.map((l) => ({ type: 'Lists' as const, id: l.id })),
-              { type: 'Lists' as const, id: `BOARD_${boardId}` },
+              ...result.map(({ boardId }) => ({
+                type: 'Lists' as const,
+                id: `BOARD_${boardId}`,
+              })),
+              ...result.flatMap(({ lists }) =>
+                lists.map((l) => ({ type: 'Lists' as const, id: l.id }))
+              ),
             ]
-          : [{ type: 'Lists' as const, id: `BOARD_${boardId}` }],
+          : boardIds.map((id) => ({
+              type: 'Lists' as const,
+              id: `BOARD_${id}`,
+            })),
     }),
     createList: builder.mutation<List, { boardId: string; title: string }>({
       query: ({ boardId, title }) => ({
-        url: `boards/${boardId}/lists`,
+        url: `/lists/create`,
         method: 'POST',
-        body: { title },
+        body: { title, boardId },
       }),
       invalidatesTags: (result, error, { boardId }) => [
         { type: 'Lists', id: `BOARD_${boardId}` },
@@ -51,12 +68,8 @@ export const listsApi = createApi({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (res, err, arg) => [
-        { type: 'Lists', id: arg.id },
-        {
-          type: 'Lists',
-          id: `BOARD_${arg.id}`,
-        },
+      invalidatesTags: (result) => [
+        { type: 'Lists', id: `BOARD_${result?.boardId || 'UNKNOWN'}` },
       ],
     }),
     reorderLists: builder.mutation<
@@ -64,9 +77,9 @@ export const listsApi = createApi({
       { boardId: string; listOrder: { id: string; position: number }[] }
     >({
       query: ({ boardId, listOrder }) => ({
-        url: `boards/${boardId}/lists/reorder`,
+        url: `/lists/reorder`,
         method: 'POST',
-        body: { listOrder },
+        body: { listOrder, boardId },
       }),
       invalidatesTags: (res, err, { boardId }) => [
         { type: 'Lists', id: `BOARD_${boardId}` },
