@@ -20,27 +20,13 @@ export const listsApi = createApi({
   baseQuery: apiBaseQuery,
   tagTypes: ['Lists'],
   endpoints: (builder) => ({
-    fetchLists: builder.query<ListsByBoard[], string[]>({
+    getLists: builder.query<ListsByBoard[], string[]>({
       query: (boardIds) => ({
         url: '/lists',
         method: 'POST',
         body: { boardIds },
       }),
-      providesTags: (result, error, boardIds) =>
-        result
-          ? [
-              ...result.map(({ boardId }) => ({
-                type: 'Lists' as const,
-                id: `BOARD_${boardId}`,
-              })),
-              ...result.flatMap(({ lists }) =>
-                lists.map((l) => ({ type: 'Lists' as const, id: l.id }))
-              ),
-            ]
-          : boardIds.map((id) => ({
-              type: 'Lists' as const,
-              id: `BOARD_${id}`,
-            })),
+      providesTags: ['Lists'],
     }),
     createList: builder.mutation<List, { boardId: string; title: string }>({
       query: ({ boardId, title }) => ({
@@ -48,16 +34,14 @@ export const listsApi = createApi({
         method: 'POST',
         body: { title, boardId },
       }),
-      invalidatesTags: (result, error, { boardId }) => [
-        { type: 'Lists', id: `BOARD_${boardId}` },
-      ],
+      invalidatesTags: ['Lists'],
     }),
     deleteList: builder.mutation<void, string>({
       query: (id) => ({
         url: `lists/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [{ type: 'Lists', id }],
+      invalidatesTags: ['Lists'],
     }),
     updateList: builder.mutation<
       List,
@@ -68,9 +52,7 @@ export const listsApi = createApi({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: (result) => [
-        { type: 'Lists', id: `BOARD_${result?.boardId || 'UNKNOWN'}` },
-      ],
+      invalidatesTags: ['Lists'],
     }),
     reorderLists: builder.mutation<
       void,
@@ -81,15 +63,13 @@ export const listsApi = createApi({
         method: 'POST',
         body: { listOrder, boardId },
       }),
-      invalidatesTags: (res, err, { boardId }) => [
-        { type: 'Lists', id: `BOARD_${boardId}` },
-      ],
+      invalidatesTags: ['Lists'],
     }),
   }),
 });
 
 export const {
-  useFetchListsQuery,
+  useGetListsQuery,
   useUpdateListMutation,
   useCreateListMutation,
   useDeleteListMutation,

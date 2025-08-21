@@ -4,11 +4,11 @@ import {
   useDeleteListMutation,
   type List,
   useReorderListsMutation,
-  useFetchListsQuery,
+  useGetListsQuery,
   useCreateListMutation,
 } from '../../../../store/lists.api';
 import {
-  useFetchTasksByBoardQuery,
+  useGetTasksByBoardQuery,
   useMoveTaskMutation,
   useReorderTasksMutation,
 } from '../../../../store/tasks.api';
@@ -30,8 +30,8 @@ export const BoardsList = () => {
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAddingList, setIsAddingList] = useState(false);
 
-  const { data: lists } = useFetchListsQuery([id as string]);
-  const { data: tasks } = useFetchTasksByBoardQuery(id as string);
+  const { data: lists } = useGetListsQuery([id as string]);
+  const { data: tasks } = useGetTasksByBoardQuery(id as string);
   const [updateList] = useUpdateListMutation();
   const [createList] = useCreateListMutation();
   const [deleteList] = useDeleteListMutation();

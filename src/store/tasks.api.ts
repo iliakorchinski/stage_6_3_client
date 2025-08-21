@@ -23,7 +23,7 @@ export const tasksApi = createApi({
         method: 'POST',
         body: { title, description, listId },
       }),
-      invalidatesTags: [{ type: 'Task', id: 'TASK' }],
+      invalidatesTags: ['Task'],
     }),
     updateTask: builder.mutation<
       Task,
@@ -34,14 +34,14 @@ export const tasksApi = createApi({
         method: 'PATCH',
         body: patch,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Task', id }],
+      invalidatesTags: ['Task'],
     }),
     deleteTask: builder.mutation<{ success: boolean; id: string }, string>({
       query: (id) => ({
         url: `/tasks/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [{ type: 'Task', id }],
+      invalidatesTags: ['Task'],
     }),
     moveTask: builder.mutation<
       Task,
@@ -52,21 +52,15 @@ export const tasksApi = createApi({
         method: 'PATCH',
         body: { listId, position },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Task', id }],
+      invalidatesTags: ['Task'],
     }),
-    fetchTasksByBoard: builder.query<Task[], string>({
+    getTasksByBoard: builder.query<Task[], string>({
       query: (boardId) => ({
         url: '/tasks',
         method: 'POST',
         body: { boardId },
       }),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Task' as const, id })),
-              { type: 'Task', id: 'TASK' },
-            ]
-          : [{ type: 'Task', id: 'TASK' }],
+      providesTags: ['Task'],
     }),
     reorderTasks: builder.mutation<
       Task[],
@@ -77,8 +71,7 @@ export const tasksApi = createApi({
         method: 'POST',
         body: { taskOrder },
       }),
-      invalidatesTags: (result, error, { taskOrder }) =>
-        taskOrder.map((t) => ({ type: 'Task' as const, id: t.id })),
+      invalidatesTags: ['Task'],
     }),
   }),
 });
@@ -88,6 +81,6 @@ export const {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
   useMoveTaskMutation,
-  useFetchTasksByBoardQuery,
+  useGetTasksByBoardQuery,
   useReorderTasksMutation,
 } = tasksApi;
