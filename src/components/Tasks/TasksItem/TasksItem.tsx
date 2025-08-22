@@ -8,8 +8,7 @@ import { type Task } from '../../../store/tasks.api';
 import { useDrag, useDrop } from 'react-dnd';
 import { UpdateTaskModal } from '../../Modals/UpdateTaskModal';
 import { container, deleteIcon, spanTitle } from './styles.css';
-import { useParams } from 'react-router-dom';
-import { useGetHistoryByBoardQuery } from '../../../store/history.api';
+import { useFetchBoardsQuery } from '../../../store/boards.api';
 
 interface TaskItemProps {
   task: Task;
@@ -24,8 +23,7 @@ interface TaskItemProps {
 }
 
 export const TaskItem = ({ task, index, listId, moveTask }: TaskItemProps) => {
-  const { id } = useParams();
-  const { refetch } = useGetHistoryByBoardQuery(id as string);
+  const { refetch } = useFetchBoardsQuery({ includeHistory: true });
   const [updateTask] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const [isEditing, setIsEditing] = useState(false);

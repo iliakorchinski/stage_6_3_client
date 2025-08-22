@@ -3,9 +3,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import HistoryIcon from '@mui/icons-material/History';
 import { input } from './styles.css';
 import { useState } from 'react';
-import { useGetHistoryByBoardQuery } from '../../../../../store/history.api';
 import { HistoryBoardModal } from '../../../../Modals/HistoryBoardModal';
 import { useParams } from 'react-router';
+import { useFetchBoardsQuery } from '../../../../../store/boards.api';
 
 interface ListItemProps {
   list: List;
@@ -35,10 +35,14 @@ export const ListItem = ({
   const { id } = useParams();
 
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-  const { data } = useGetHistoryByBoardQuery(id as string, {
-    skip: !isHistoryModalOpen,
-  });
-  const history = data?.filter((item) => item.entityId === list.id);
+  const { data } = useFetchBoardsQuery(
+    { includeHistory: true },
+    { skip: !isHistoryModalOpen }
+  );
+  const history = data
+    ?.find((board) => board.id === id)
+    ?.history?.filter((item) => item.entityId === list.id);
+
   return (
     <>
       <h3

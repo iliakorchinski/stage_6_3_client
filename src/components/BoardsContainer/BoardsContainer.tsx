@@ -23,7 +23,7 @@ export const BoardsContainer = () => {
   const [createBoard] = useCreateBoardMutation();
   const [deleteBoard] = useDeleteBoardMutation();
   const [updateBoard] = useUpdateBoardMutation();
-  const { data: boards } = useFetchBoardsQuery();
+  const { data: boards } = useFetchBoardsQuery({ includeHistory: false });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');

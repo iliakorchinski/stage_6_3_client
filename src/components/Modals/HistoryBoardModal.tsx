@@ -1,5 +1,5 @@
 import { Box, Button, List, ListItem, Modal, Typography } from '@mui/material';
-import { type History } from '../../store/history.api';
+import { type History } from '../../store/boards.api';
 
 type EntityType = 'Board' | 'List' | 'Task';
 type EntityPair = [EntityType, EntityType];

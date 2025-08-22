@@ -24,14 +24,13 @@ import {
 } from './BoardsList.utils';
 import { AddListContainer } from './AddListContainer/AddListContainer';
 import { ListItem } from './ListItem/ListItem';
-import { useGetHistoryByBoardQuery } from '../../../../store/history.api';
+import { useFetchBoardsQuery } from '../../../../store/boards.api';
 
 export const BoardsList = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAddingList, setIsAddingList] = useState(false);
-  const { refetch } = useGetHistoryByBoardQuery(id as string);
-
+  const { refetch } = useFetchBoardsQuery({ includeHistory: true });
   const { data: lists } = useGetListsQuery([id as string]);
   const { data: tasks } = useGetTasksByBoardQuery(id as string);
   const [updateList] = useUpdateListMutation();

@@ -3,8 +3,7 @@ import { useCreateTaskMutation, type Task } from '../../../store/tasks.api';
 import { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { addList } from './styles.css';
-import { useGetHistoryByBoardQuery } from '../../../store/history.api';
-import { useParams } from 'react-router-dom';
+import { useFetchBoardsQuery } from '../../../store/boards.api';
 
 interface TasksListProps {
   listId: string;
@@ -18,11 +17,10 @@ interface TasksListProps {
 }
 
 export const TasksList = ({ listId, tasks, moveTask }: TasksListProps) => {
-  const { id } = useParams();
   const [newTitle, setNewTitle] = useState('');
 
   const [createTask] = useCreateTaskMutation();
-  const { refetch } = useGetHistoryByBoardQuery(id as string);
+  const { refetch } = useFetchBoardsQuery({ includeHistory: true });
 
   const ref = useRef<HTMLDivElement>(null);
 

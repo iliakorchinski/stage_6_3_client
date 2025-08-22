@@ -13,15 +13,12 @@ import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from '@mui/material';
 import { HistoryBoardModal } from '../../Modals/HistoryBoardModal';
-import { useGetHistoryByBoardQuery } from '../../../store/history.api';
 
 export const TasksContainer = () => {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const { id } = useParams();
-  const { data: history } = useGetHistoryByBoardQuery(id as string, {
-    skip: !isHistoryModalOpen,
-  });
-  const { data } = useFetchBoardsQuery();
+  const { data } = useFetchBoardsQuery({ includeHistory: true });
+  const history = data?.find((board) => board.id === id)?.history;
 
   const boardName = data?.find((board) => board.id === id);
 
