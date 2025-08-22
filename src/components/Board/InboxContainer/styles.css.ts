@@ -4,9 +4,8 @@ export const inboxContainer = style({
   display: 'flex',
   flexDirection: 'column',
   width: '30%',
-  height: '100vh',
+  height: '100%',
   backgroundColor: '#172f53',
-
   border: '1px solid #a6c5e2',
   borderRadius: 16,
   overflow: 'hidden',

@@ -4,6 +4,7 @@ import { apiBaseQuery } from '../utils/api.utils';
 export interface Board {
   id: string;
   title: string;
+  position?: number;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -3,7 +3,11 @@ import {
   type List,
 } from '../../../../../store/lists.api';
 import DeleteIcon from '@mui/icons-material/Delete';
+import HistoryIcon from '@mui/icons-material/History';
 import { input } from './styles.css';
+import { useState } from 'react';
+import { useGetHistoryByListQuery } from '../../../../../store/history.api';
+import { HistoryBoardModal } from '../../../../Modals/HistoryBoardModal';
 
 interface ListItemProps {
   list: List;
@@ -30,6 +34,10 @@ export const ListItem = ({
   className,
 }: ListItemProps) => {
   const [deleteList] = useDeleteListMutation();
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const { data: history } = useGetHistoryByListQuery(list.id, {
+    skip: !isHistoryModalOpen,
+  });
   return (
     <>
       <h3
@@ -51,9 +59,21 @@ export const ListItem = ({
           list.title
         )}
       </h3>
+
       <div className={className}>
         <DeleteIcon color="error" onClick={() => deleteList(list.id)} />
+        <HistoryIcon
+          color="primary"
+          onClick={() => setIsHistoryModalOpen(true)}
+        />
       </div>
+
+      <HistoryBoardModal
+        isModalOpen={isHistoryModalOpen}
+        setIsModalOpen={setIsHistoryModalOpen}
+        history={history}
+        allowedEntityTypes={['List', 'Task']}
+      />
     </>
   );
 };

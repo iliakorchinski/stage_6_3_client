@@ -40,7 +40,6 @@ export const deleteIcon = style({
   top: 5,
   right: 5,
   display: 'flex',
-  gap: 5,
   opacity: 0,
   transition: 'opacity 0.2s',
 });
