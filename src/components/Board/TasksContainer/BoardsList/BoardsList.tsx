@@ -24,11 +24,13 @@ import {
 } from './BoardsList.utils';
 import { AddListContainer } from './AddListContainer/AddListContainer';
 import { ListItem } from './ListItem/ListItem';
+import { useGetHistoryByBoardQuery } from '../../../../store/history.api';
 
 export const BoardsList = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAddingList, setIsAddingList] = useState(false);
+  const { refetch } = useGetHistoryByBoardQuery(id as string);
 
   const { data: lists } = useGetListsQuery([id as string]);
   const { data: tasks } = useGetTasksByBoardQuery(id as string);
@@ -60,16 +62,22 @@ export const BoardsList = () => {
     }
   }, [tasks]);
 
-  const handleMoveList = (dragIndex: number, hoverIndex: number) => {
+  const handleMoveList = async (dragIndex: number, hoverIndex: number) => {
     const positioned = moveList(listOrder, dragIndex, hoverIndex);
     setListOrder(positioned);
-    reorderLists({
+    await reorderLists({
       boardId: id as string,
       listOrder: positioned,
     });
+    refetch();
   };
 
-  const moveTask = (
+  const handleDeleteList = async (id: string) => {
+    await deleteList(id);
+    refetch();
+  };
+
+  const moveTask = async (
     dragIndex: number,
     hoverIndex: number,
     fromListId: string,
@@ -85,7 +93,7 @@ export const BoardsList = () => {
         ...prev,
         [fromListId]: positioned,
       }));
-      reorderTasks({
+      await reorderTasks({
         taskOrder: positioned,
       });
     } else {
@@ -102,8 +110,17 @@ export const BoardsList = () => {
         [toListId]: newToTasks,
       }));
 
-      moveTaskApi({ id: dragged.id, listId: toListId, position: hoverIndex });
-      moveTaskApi({ id: dropped.id, listId: toListId, position: dragIndex });
+      await moveTaskApi({
+        id: dragged.id,
+        listId: toListId,
+        position: hoverIndex,
+      });
+      await moveTaskApi({
+        id: dropped.id,
+        listId: toListId,
+        position: dragIndex,
+      });
+      refetch();
     }
   };
 
@@ -123,11 +140,13 @@ export const BoardsList = () => {
       });
       setIsEditing(null);
       setUpdatedItem(null);
+      refetch();
     }
     if (isAddingList && newListTitle.trim()) {
       await createList({ boardId: id as string, title: newListTitle.trim() });
       setNewListTitle('');
       setIsAddingList(false);
+      refetch();
     }
   };
 
@@ -150,7 +169,7 @@ export const BoardsList = () => {
             handleUpdateList={handleUpdateList}
             handleSave={handleSave}
             className={deleteIcon}
-            deleteList={deleteList}
+            handleDeleteList={() => handleDeleteList(list.id)}
           />
 
           <div style={{ marginTop: '8px' }}>

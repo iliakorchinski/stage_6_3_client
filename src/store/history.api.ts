@@ -23,15 +23,10 @@ export const historyApi = createApi({
   tagTypes: ['History'],
   endpoints: (builder) => ({
     getHistoryByBoard: builder.query<History[], string>({
-      query: (boardId) => `history/boards/${boardId}`,
-      providesTags: ['History'],
-    }),
-    getHistoryByList: builder.query<History[], string>({
-      query: (listId) => `history/lists/${listId}`,
+      query: (id) => `history/${id}`,
       providesTags: ['History'],
     }),
   }),
 });
 
-export const { useGetHistoryByBoardQuery, useGetHistoryByListQuery } =
-  historyApi;
+export const { useGetHistoryByBoardQuery } = historyApi;

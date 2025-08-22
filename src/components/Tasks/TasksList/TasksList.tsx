@@ -3,6 +3,8 @@ import { useCreateTaskMutation, type Task } from '../../../store/tasks.api';
 import { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { addList } from './styles.css';
+import { useGetHistoryByBoardQuery } from '../../../store/history.api';
+import { useParams } from 'react-router-dom';
 
 interface TasksListProps {
   listId: string;
@@ -16,9 +18,11 @@ interface TasksListProps {
 }
 
 export const TasksList = ({ listId, tasks, moveTask }: TasksListProps) => {
+  const { id } = useParams();
   const [newTitle, setNewTitle] = useState('');
 
   const [createTask] = useCreateTaskMutation();
+  const { refetch } = useGetHistoryByBoardQuery(id as string);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -39,6 +43,7 @@ export const TasksList = ({ listId, tasks, moveTask }: TasksListProps) => {
     if (!newTitle.trim()) return;
     await createTask({ listId, title: newTitle });
     setNewTitle('');
+    refetch();
   };
 
   return (
