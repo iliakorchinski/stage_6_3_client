@@ -5,7 +5,7 @@ import { input } from './styles.css';
 import { useState } from 'react';
 import { HistoryBoardModal } from '../../../../Modals/HistoryBoardModal';
 import { useParams } from 'react-router';
-import { useFetchBoardsQuery } from '../../../../../store/boards.api';
+import { useFetchBoardQuery } from '../../../../../store/boards.api';
 
 interface ListItemProps {
   list: List;
@@ -35,13 +35,15 @@ export const ListItem = ({
   const { id } = useParams();
 
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-  const { data } = useFetchBoardsQuery(
-    { includeHistory: true },
-    { skip: !isHistoryModalOpen }
+
+  const { data: board } = useFetchBoardQuery(
+    {
+      id: id as string,
+      includeParams: ['history', 'lists'],
+    },
+    { skip: !isHistoryModalOpen, refetchOnMountOrArgChange: true }
   );
-  const history = data
-    ?.find((board) => board.id === id)
-    ?.history?.filter((item) => item.entityId === list.id);
+  const history = board?.history?.filter((item) => item.entityId === list.id);
 
   return (
     <>

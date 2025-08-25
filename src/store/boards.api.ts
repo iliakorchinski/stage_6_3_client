@@ -37,6 +37,18 @@ export const boardsApi = createApi({
       },
       providesTags: ['Boards'],
     }),
+    fetchBoard: builder.query<
+      Board,
+      { id: string; includeParams?: string[] | null }
+    >({
+      query: ({ includeParams, id }) => {
+        const params = includeParams?.length
+          ? `?include=${includeParams.join(',')}`
+          : '';
+        return `boards/${id}${params}`;
+      },
+      providesTags: ['Boards'],
+    }),
     createBoard: builder.mutation<Board, { title: string }>({
       query: (data) => ({
         url: 'boards',
@@ -65,6 +77,7 @@ export const boardsApi = createApi({
 
 export const {
   useFetchBoardsQuery,
+  useFetchBoardQuery,
   useCreateBoardMutation,
   useUpdateBoardMutation,
   useDeleteBoardMutation,

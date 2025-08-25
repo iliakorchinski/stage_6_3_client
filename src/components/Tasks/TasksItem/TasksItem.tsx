@@ -8,7 +8,6 @@ import { type Task } from '../../../store/tasks.api';
 import { useDrag, useDrop } from 'react-dnd';
 import { UpdateTaskModal } from '../../Modals/UpdateTaskModal';
 import { container, deleteIcon, spanTitle } from './styles.css';
-import { useFetchBoardsQuery } from '../../../store/boards.api';
 
 interface TaskItemProps {
   task: Task;
@@ -23,7 +22,6 @@ interface TaskItemProps {
 }
 
 export const TaskItem = ({ task, index, listId, moveTask }: TaskItemProps) => {
-  const { refetch } = useFetchBoardsQuery({ includeHistory: true });
   const [updateTask] = useUpdateTaskMutation();
   const [deleteTask] = useDeleteTaskMutation();
   const [isEditing, setIsEditing] = useState(false);
@@ -50,12 +48,10 @@ export const TaskItem = ({ task, index, listId, moveTask }: TaskItemProps) => {
   const handleSave = async () => {
     await updateTask({ id: task.id, title, description });
     setIsEditing(false);
-    refetch();
   };
 
   const handleDeleteTask = async () => {
     await deleteTask(task.id);
-    refetch();
   };
 
   return (

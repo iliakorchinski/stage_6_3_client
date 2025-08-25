@@ -3,7 +3,6 @@ import { useCreateTaskMutation, type Task } from '../../../store/tasks.api';
 import { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { addList } from './styles.css';
-import { useFetchBoardsQuery } from '../../../store/boards.api';
 
 interface TasksListProps {
   listId: string;
@@ -20,7 +19,6 @@ export const TasksList = ({ listId, tasks, moveTask }: TasksListProps) => {
   const [newTitle, setNewTitle] = useState('');
 
   const [createTask] = useCreateTaskMutation();
-  const { refetch } = useFetchBoardsQuery({ includeHistory: true });
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -41,7 +39,6 @@ export const TasksList = ({ listId, tasks, moveTask }: TasksListProps) => {
     if (!newTitle.trim()) return;
     await createTask({ listId, title: newTitle });
     setNewTitle('');
-    refetch();
   };
 
   return (
