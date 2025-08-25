@@ -3,3 +3,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+html {
+  background-color: #1d2125;
+}
+
+body {
+  font-family: 'Roboto' sans-serif;
+}
