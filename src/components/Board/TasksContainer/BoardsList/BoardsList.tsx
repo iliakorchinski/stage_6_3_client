@@ -24,13 +24,11 @@ import {
 } from './BoardsList.utils';
 import { AddListContainer } from './AddListContainer/AddListContainer';
 import { ListItem } from './ListItem/ListItem';
-import { useFetchBoardsQuery } from '../../../../store/boards.api';
 
 export const BoardsList = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAddingList, setIsAddingList] = useState(false);
-  const { refetch } = useFetchBoardsQuery({ includeHistory: true });
   const { data: lists } = useGetListsQuery([id as string]);
   const { data: tasks } = useGetTasksByBoardQuery(id as string);
   const [updateList] = useUpdateListMutation();
@@ -68,12 +66,10 @@ export const BoardsList = () => {
       boardId: id as string,
       listOrder: positioned,
     });
-    refetch();
   };
 
   const handleDeleteList = async (id: string) => {
     await deleteList(id);
-    refetch();
   };
 
   const moveTask = async (
@@ -119,7 +115,6 @@ export const BoardsList = () => {
         listId: toListId,
         position: dragIndex,
       });
-      refetch();
     }
   };
 
@@ -139,13 +134,11 @@ export const BoardsList = () => {
       });
       setIsEditing(null);
       setUpdatedItem(null);
-      refetch();
     }
     if (isAddingList && newListTitle.trim()) {
       await createList({ boardId: id as string, title: newListTitle.trim() });
       setNewListTitle('');
       setIsAddingList(false);
-      refetch();
     }
   };
 
